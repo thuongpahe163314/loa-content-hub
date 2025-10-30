@@ -1,73 +1,107 @@
-# Welcome to your Lovable project
+# Loa Phường Service - Content Management System
 
-## Project info
+Hệ thống quản trị nội dung thông báo cộng đồng hiện đại, được xây dựng với React, TypeScript và Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/13c490bd-75f4-42bf-91c6-abfc31deea1d
+![Loa Phường CMS](https://via.placeholder.com/800x400/3B82F6/FFFFFF?text=Loa+Phuong+CMS)
 
-## How can I edit this code?
+## ✨ Tính năng nổi bật
 
-There are several ways of editing your application.
+- 📝 **Quản lý nội dung đầy đủ**: CRUD hoàn chỉnh với validation, filter, sort, pagination
+- 📁 **Upload & quản lý file**: Hỗ trợ ảnh, video, PDF với preview
+- 🔔 **Hệ thống thông báo tích hợp**: Gửi thông báo qua email và in-app
+- 🎨 **Giao diện đẹp mắt**: Design system chuyên nghiệp với dark mode
+- 🔍 **Tìm kiếm & lọc mạnh mẽ**: Full-text search, multi-filter
+- 📱 **Responsive 100%**: Tối ưu cho mọi thiết bị
+- 🚀 **Performance cao**: React Query caching, lazy loading
 
-**Use Lovable**
+## 🚀 Bắt đầu nhanh
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/13c490bd-75f4-42bf-91c6-abfc31deea1d) and start prompting.
+### Yêu cầu
+- Node.js 18+
+- npm hoặc yarn
 
-Changes made via Lovable will be committed automatically to this repo.
+### Cài đặt
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# Clone repository
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Cài đặt dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Cấu hình môi trường
+cp .env.example .env
+# Chỉnh sửa VITE_API_BASE_URL trong .env
+
+# Khởi động development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Truy cập `http://localhost:8080` để xem ứng dụng.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📖 Tài liệu chi tiết
 
-**Use GitHub Codespaces**
+Xem [README-VI.md](./README-VI.md) để biết:
+- Hướng dẫn sử dụng chi tiết
+- Cấu trúc dự án
+- API endpoints
+- Validation rules
+- Hướng dẫn phát triển
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🛠️ Công nghệ
 
-## What technologies are used for this project?
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - Component library
+- **React Query** - Data fetching & caching
+- **React Hook Form** - Form management
+- **React Router v6** - Routing
 
-This project is built with:
+## 📁 Cấu trúc
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+├── components/     # Reusable components
+├── pages/         # Page components
+├── services/      # API services
+├── types/         # TypeScript types
+├── lib/          # Utilities
+└── index.css     # Global styles & design system
+```
 
-## How can I deploy this project?
+## 🎨 Design System
 
-Simply open [Lovable](https://lovable.dev/projects/13c490bd-75f4-42bf-91c6-abfc31deea1d) and click on Share -> Publish.
+Hệ thống sử dụng design tokens định nghĩa trong `src/index.css`:
+- **Primary**: Blue (#3B82F6) - Tin cậy, chuyên nghiệp
+- **Secondary**: Orange (#FB923C) - Năng động, thông báo
+- **Success**: Green - Thành công
+- **Warning**: Yellow - Cảnh báo
+- **Destructive**: Red - Nguy hiểm
 
-## Can I connect a custom domain to my Lovable project?
+## 📝 Scripts
 
-Yes, you can!
+```bash
+npm run dev      # Development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤝 Đóng góp
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Vui lòng đọc [CONTRIBUTING.md](./CONTRIBUTING.md) để biết quy trình đóng góp.
+
+## 📄 License
+
+Dự án nội bộ - All Rights Reserved
+
+## 📞 Liên hệ
+
+Để biết thêm thông tin, liên hệ team phát triển.
+
+---
+
+Được xây dựng với ❤️ bởi Loa Phường Team

@@ -8,6 +8,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import ContentList from "./pages/admin/content/ContentList";
 import ContentForm from "./pages/admin/content/ContentForm";
 import ContentDetail from "./pages/admin/content/ContentDetail";
+import Auth from "./pages/Auth";
+import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,7 +22,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/admin" replace />} />
-          <Route path="/admin" element={<AppLayout />}>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="content" element={<ContentList />} />
             <Route path="content/new" element={<ContentForm />} />

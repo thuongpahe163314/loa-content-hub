@@ -7,32 +7,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { authService } from '@/services/authService';
-import { LogIn, UserPlus, Radio } from 'lucide-react';
+import { Radio } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
   password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
 });
 
-const signupSchema = z.object({
-  name: z.string().min(2, 'Tên phải có ít nhất 2 ký tự'),
-  email: z.string().email('Email không hợp lệ'),
-  password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Mật khẩu xác nhận không khớp',
-  path: ['confirmPassword'],
-});
-
 type LoginFormData = z.infer<typeof loginSchema>;
-type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function Auth() {
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -43,16 +30,6 @@ export default function Auth() {
     defaultValues: {
       email: '',
       password: '',
-    },
-  });
-
-  const signupForm = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
     },
   });
 
@@ -80,31 +57,6 @@ export default function Auth() {
     }
   };
 
-  const onSignup = async (data: SignupFormData) => {
-    setIsLoading(true);
-    try {
-      const response = await authService.signup({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: 'CONTENT_CREATOR',
-      });
-      setAuth(response.token, response.user);
-      toast({
-        title: 'Đăng ký thành công',
-        description: 'Tài khoản của bạn đã được tạo!',
-      });
-      navigate('/admin');
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Đăng ký thất bại',
-        description: error.response?.data?.message || 'Có lỗi xảy ra khi tạo tài khoản',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-hero p-4">
@@ -126,130 +78,45 @@ export default function Auth() {
         </CardHeader>
 
         <CardContent>
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'login' | 'signup')} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login" className="flex items-center gap-2">
-                <LogIn className="h-4 w-4" />
-                Đăng nhập
-              </TabsTrigger>
-              <TabsTrigger value="signup" className="flex items-center gap-2">
-                <UserPlus className="h-4 w-4" />
-                Đăng ký
-              </TabsTrigger>
-            </TabsList>
+          <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                {...loginForm.register('email')}
+                className={loginForm.formState.errors.email ? 'border-destructive' : ''}
+              />
+              {loginForm.formState.errors.email && (
+                <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
+              )}
+            </div>
 
-            <TabsContent value="login" className="space-y-4 mt-0">
-              <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    {...loginForm.register('email')}
-                    className={loginForm.formState.errors.email ? 'border-destructive' : ''}
-                  />
-                  {loginForm.formState.errors.email && (
-                    <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
-                  )}
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Mật khẩu</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                {...loginForm.register('password')}
+                className={loginForm.formState.errors.password ? 'border-destructive' : ''}
+              />
+              {loginForm.formState.errors.password && (
+                <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
+              )}
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Mật khẩu</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="••••••••"
-                    {...loginForm.register('password')}
-                    className={loginForm.formState.errors.password ? 'border-destructive' : ''}
-                  />
-                  {loginForm.formState.errors.password && (
-                    <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full"
-                  variant="gradient"
-                  size="lg"
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
-                </Button>
-              </form>
-            </TabsContent>
-
-            <TabsContent value="signup" className="space-y-4 mt-0">
-              <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Họ và tên</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="Nguyễn Văn A"
-                    {...signupForm.register('name')}
-                    className={signupForm.formState.errors.name ? 'border-destructive' : ''}
-                  />
-                  {signupForm.formState.errors.name && (
-                    <p className="text-sm text-destructive">{signupForm.formState.errors.name.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    {...signupForm.register('email')}
-                    className={signupForm.formState.errors.email ? 'border-destructive' : ''}
-                  />
-                  {signupForm.formState.errors.email && (
-                    <p className="text-sm text-destructive">{signupForm.formState.errors.email.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mật khẩu</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="••••••••"
-                    {...signupForm.register('password')}
-                    className={signupForm.formState.errors.password ? 'border-destructive' : ''}
-                  />
-                  {signupForm.formState.errors.password && (
-                    <p className="text-sm text-destructive">{signupForm.formState.errors.password.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-confirm-password">Xác nhận mật khẩu</Label>
-                  <Input
-                    id="signup-confirm-password"
-                    type="password"
-                    placeholder="••••••••"
-                    {...signupForm.register('confirmPassword')}
-                    className={signupForm.formState.errors.confirmPassword ? 'border-destructive' : ''}
-                  />
-                  {signupForm.formState.errors.confirmPassword && (
-                    <p className="text-sm text-destructive">{signupForm.formState.errors.confirmPassword.message}</p>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full"
-                  variant="gradient"
-                  size="lg"
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Đang xử lý...' : 'Đăng ký'}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+            <Button
+              type="submit"
+              className="w-full"
+              variant="gradient"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
+            </Button>
+          </form>
         </CardContent>
 
         <CardFooter className="flex flex-col space-y-2 text-center text-sm text-muted-foreground border-t pt-4">
